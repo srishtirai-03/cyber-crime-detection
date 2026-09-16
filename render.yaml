@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: cyber-crime-detection
+    env: docker
+    plan: free
+    branch: main
+    repo: https://github.com/srishtirai-03/cyber-crime-detection
+    healthCheckPath: /api/complaints/report
