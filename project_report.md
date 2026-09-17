@@ -1,43 +1,35 @@
 # Project Report: Cyber Crime Complaint Management System
 
 ## 1. Introduction
-The **Cyber Crime Complaint Management System** is a comprehensive software solution designed to streamline the reporting, tracking, and management of cybercrime incidents. Originally conceptualized as a command-line interface (CLI) application, this project has been significantly upgraded into a **full-stack modern web application**. 
+The **Cyber Crime Complaint Management System** is a lightweight, efficient software solution designed to streamline the reporting, tracking, and management of cybercrime incidents. The application operates as a **Command-Line Interface (CLI)** program, offering an interactive, terminal-based experience.
 
-This transition provides a highly accessible, user-friendly, and visually appealing platform for registering cybercrime complaints (such as Phishing, Financial Fraud, and Identity Theft) while allowing administrators to track and update the lifecycle of each case efficiently.
+This streamlined architecture provides a fast, text-based platform for registering cybercrime complaints (such as Phishing, Financial Fraud, and Identity Theft) while allowing administrators to track and update the lifecycle of each case directly from their console.
 
 ## 2. Objectives
-*   **Accessibility:** To provide an easy-to-use web interface for users to report cybercrimes without needing technical CLI knowledge.
+*   **Efficiency:** To provide a fast, terminal-based interface for managing cybercrime records without the overhead of a web server or graphical UI.
 *   **Case Tracking:** To enable the generation of unique, standardized complaint IDs (e.g., `CYB1001`) for seamless case tracking.
-*   **Data Persistence:** To migrate from flat-file storage to a relational database for robust data integrity and querying.
-*   **Analytics:** To provide a real-time dashboard reflecting system statistics, priority cases, and resolution metrics.
+*   **Data Persistence:** To utilize a relational database (H2) for robust data integrity and querying.
+*   **Analytics:** To provide instant system statistics, priority cases, and resolution metrics directly within the console.
 
 ## 3. Technology Stack
-The application employs a modern, lightweight, and efficient technology stack:
+The application employs a robust Java backend optimized for CLI execution:
 
-### Backend
-*   **Framework:** Spring Boot 3.3.x (Java 17)
+*   **Framework:** Spring Boot 3.3.x (Java 17) using `CommandLineRunner`
 *   **Data Access:** Spring Data JPA / Hibernate
 *   **Database:** H2 In-Memory Relational Database (Configured for easy testing and schema auto-generation)
-*   **Build Tool:** Maven
-
-### Frontend
-*   **Structure & Logic:** Vanilla HTML5 and JavaScript (ES6)
-*   **Styling:** Vanilla CSS3
-*   **Design Paradigm:** Premium Dark Mode, Glassmorphism, Micro-animations, and Responsive Web Design
-*   **Typography:** Google Fonts (Inter)
+*   **Build Tool:** Maven Wrapper (`mvnw`)
 
 ## 4. System Architecture
-The system follows a standard **Model-View-Controller (MVC)** pattern via RESTful APIs:
-1.  **Frontend (View):** A Single Page Application (SPA) located in the `src/main/resources/static` directory. It uses JavaScript `fetch()` to communicate asynchronously with the backend.
-2.  **Controller Layer:** `ComplaintController.java` exposes REST endpoints (GET, POST, PUT) to handle HTTP requests.
-3.  **Service Layer:** `ComplaintService.java` encapsulates business logic, including custom ID generation and statistical calculations for the dashboard.
-4.  **Repository Layer:** `ComplaintRepository.java` extends `JpaRepository` to interface directly with the H2 Database.
-5.  **Model Layer:** `Complaint.java` defines the JPA Entity mapped to the database table.
+The system follows a streamlined service-oriented architecture:
+1.  **CLI Runner (`CliRunner.java`):** Intercepts the Spring Boot startup lifecycle to launch an interactive `java.util.Scanner` loop, providing a text-based menu to the user.
+2.  **Service Layer (`ComplaintService.java`):** Encapsulates business logic, including custom ID generation and statistical calculations for system reports.
+3.  **Repository Layer (`ComplaintRepository.java`):** Extends `JpaRepository` to interface directly with the H2 Database.
+4.  **Model Layer (`Complaint.java`):** Defines the JPA Entity mapped to the database table.
 
 ## 5. Key Features & Modules
 
-### 5.1 Real-time Analytics Dashboard
-A dynamic dashboard that provides a bird's-eye view of the system. It calculates and displays:
+### 5.1 System Report Generator
+A reporting module that provides a bird's-eye view of the system. It calculates and prints:
 *   Total Complaints Registered
 *   Open / Pending Complaints
 *   Resolved Cases
@@ -45,25 +37,19 @@ A dynamic dashboard that provides a bird's-eye view of the system. It calculates
 *   The most frequently reported crime category
 
 ### 5.2 Complaint Registration
-A user-friendly, glassmorphic form allowing victims to submit details of the incident. 
+An interactive console prompt allowing victims to submit details of the incident. 
 *   **Fields captured:** Name, Contact Number, Crime Type, Priority Level, Financial Loss, and Incident Description.
 *   **Automation:** Upon submission, the system automatically tags the complaint with a `REGISTERED` status, records the creation timestamp, and auto-generates a unique `CYBxxxx` ID.
 
 ### 5.3 Search and Lifecycle Management
-Administrators can search for any case using its unique Complaint ID.
-*   **Data Retrieval:** Instantly fetches the full details of the case.
-*   **Status Updates:** Allows authorized personnel to update the case status through its lifecycle (`REGISTERED` &rarr; `UNDER REVIEW` &rarr; `ASSIGNED` &rarr; `UNDER INVESTIGATION` &rarr; `RESOLVED` &rarr; `CLOSED`). Visual badges automatically adapt their colors based on the severity of the status.
+Administrators can search for any case using its unique Complaint ID via the menu.
+*   **Data Retrieval:** Instantly fetches and formats the full details of the case in the terminal.
+*   **Status Updates:** Allows authorized personnel to update the case status through its lifecycle (`REGISTERED` &rarr; `UNDER REVIEW` &rarr; `ASSIGNED` &rarr; `UNDER INVESTIGATION` &rarr; `RESOLVED` &rarr; `CLOSED`). 
 
 ### 5.4 Demo Dataset Integration
-To facilitate immediate demonstration and testing, the system boots with a predefined `data.sql` script. This injects 10 realistic, diverse cybercrime cases into the database upon startup, immediately populating the dashboard and search indexes.
+To facilitate immediate demonstration and testing, the system boots with a predefined `data.sql` script. This injects 10 realistic, diverse cybercrime cases into the database upon startup, immediately populating the reports and search indexes.
 
-## 6. UI/UX Design Aesthetics
-A major focus of the upgrade was creating a "Wow" factor. The UI strictly avoids generic templates, opting instead for:
-*   **Deep Cyber Aesthetic:** A deep blue/slate background with subtle radial gradients (`#0b0f19`).
-*   **Glassmorphism:** Navigation sidebars and forms utilize semi-transparent backgrounds with background-blur (`backdrop-filter: blur(10px)`), giving a frosted glass effect.
-*   **Micro-interactions:** Buttons and cards feature smooth transform scaling and box-shadow glowing effects (`rgba(59, 130, 246, 0.5)`) on hover to encourage user interaction.
-
-## 7. Setup and Execution
+## 6. Setup and Execution
 The project is entirely self-contained and requires no external database server installations.
 1.  Ensure Java 17+ is installed.
 2.  Navigate to the project root directory.
@@ -71,14 +57,12 @@ The project is entirely self-contained and requires no external database server 
     ```bash
     ./mvnw spring-boot:run
     ```
-4.  Access the web interface at `http://localhost:8080`.
-5.  *(Optional)* Access the database console at `http://localhost:8080/h2-console` (JDBC URL: `jdbc:h2:mem:cybercrime_db`).
+4.  Follow the interactive prompts in the terminal to navigate the system.
 
-## 8. Conclusion and Future Enhancements
-The migration to a Spring Boot Web Application successfully modernizes the Cyber Crime Complaint Management System. It establishes a robust, scalable foundation.
+## 7. Conclusion and Future Enhancements
+The Cyber Crime Complaint Management System provides a highly reliable, text-based tool for incident management. By leveraging Spring Boot's dependency injection and JPA capabilities without the overhead of a web server, it serves as a lightweight, lightning-fast utility.
 
 **Proposed Future Enhancements:**
-*   **Authentication & Authorization:** Implement Spring Security to separate Complainant and Investigator roles.
-*   **File Uploads:** Allow users to upload digital evidence (screenshots, emails, PDFs).
-*   **Email Notifications:** Integrate JavaMailSender to notify victims when their case status changes.
-*   **Persistent Database:** Swap the H2 in-memory database for PostgreSQL or MySQL for production deployment.
+*   **Security & Authentication:** Require a password or token to access the administrative features of the CLI (like updating status).
+*   **Export Functionality:** Add a menu option to export the system report to a CSV or PDF file.
+*   **Persistent Database:** Swap the H2 in-memory database for a file-based SQLite database or PostgreSQL for persistent, long-term deployment.
